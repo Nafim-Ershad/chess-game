@@ -3,6 +3,22 @@ import './style.scss';
 
 // IMPORTANT Consts ***
 const squares = [...document.querySelectorAll('.square')]; // Convert the HTMLCollection from ".square" to Array
+const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']; // FILES = Columns; RANKS = Rows
+const whites = [...document.querySelectorAll('.white')];
+const blacks = [...document.querySelectorAll('.black')];
+
+// PLAYER CONSTS
+const player1 = {
+    turn: 0,
+    piece: 'white'
+};
+const player2 = {
+    turn: 0,
+    piece: 'black'
+};
+// VARIABLES
+
+var turn = 1; // Who's turn it is
 
 // ***************** loop for coloring black squares *****************
 for (let i = 0; i < 4; i++) {
@@ -22,8 +38,7 @@ for (let i = 0; i < 4; i++) {
 }
 
 // ***************** Assigning FILES and RANKS in the board *****************
-// FILES = Columns; RANKS = Rows
-const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
 
 for (let i = 0; i < 64; i++) {
     squares[i].setAttribute('id', `${files[i%8]}${Math.floor(i/8)+1}`);
@@ -49,5 +64,17 @@ squares.forEach(square => {
             // Sets only when there is element in the clicked variable
             clicked.style.backgroundColor = '#bacb33';
         }
+
+        // console.log(square.getAttribute('id'));
     })
-})
+});
+
+// ***************** Position Handling *****************
+
+whites.forEach(piece => {
+    piece.addEventListener('click', () => { console.log(piece.className) });
+});
+
+blacks.forEach(piece => {
+    piece.addEventListener('click', () => { console.log(piece.className) });
+});
