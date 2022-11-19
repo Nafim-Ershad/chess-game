@@ -71,8 +71,20 @@ squares.forEach(square => {
 
 // ***************** Position Handling *****************
 
+// Function to generate availability of movement
+function movable_sqaure(piece) {
+
+}
+
 whites.forEach(piece => {
-    piece.addEventListener('click', () => { console.log(piece.className) });
+    piece.addEventListener('click', () => {
+        // PAWN movement
+        if (piece.className.includes('pawn')) {
+            if (player1.turn === 0) {
+
+            }
+        }
+    });
 });
 
 blacks.forEach(piece => {
