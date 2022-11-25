@@ -18,8 +18,12 @@ const player2 = {
     piece: 'black'
 };
 // VARIABLES
+var turn = 0; // Who's turn it is
 
-var turn = 1; // Who's turn it is
+// FUNCTIONS
+function clearMoves(moves) {
+    moves.forEach(move => move.classList.remove('available_square'));
+}
 
 // ***************** loop for coloring black squares *****************
 for (let i = 0; i < 4; i++) {
@@ -48,7 +52,7 @@ for (let i = 0; i < 8; i++) {
     }
 }
 
-// ***************** Click Handling *****************
+// ***************** Clicked Color Handling *****************
 var clicked = '';
 
 squares.forEach(square => {
@@ -75,14 +79,12 @@ squares.forEach(square => {
 // ***************** Position Handling *****************
 
 // Function to generate availability of movement
-function pawn_movement(currentPos) {
-
-}
 var move = [];
 
+// WHITE PIECES
 whites.forEach(piece => {
     piece.addEventListener('click', () => {
-        // CLEARING THE MOVE ARRAY
+        // Clears the 'move' array
         if (move.length) {
             move.forEach(el => el.classList.remove('available_square'));
             move = [];
@@ -93,17 +95,27 @@ whites.forEach(piece => {
 
                 const currentPos = piece.parentNode.getAttribute('id').split("");
 
+                // Get the predicted available squares
                 move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-1}`));
                 move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-2}`));
 
-                move.forEach(el => el.classList.add('available_square'));
+                // Loop for getting click event
+                move.forEach(el => {
+                    el.classList.add('available_square')
+                    el.addEventListener('click', () => {
+                        el.appendChild(piece);
+                        turn++;
+                        console.log(turn);
+                    });
+                });
         }
     });
 });
 
+// BLACK PIECES
 blacks.forEach(piece => {
     piece.addEventListener('click', () => {
-        // CLEARING THE MOVE ARRAY
+        // Clears the 'move' array
         if (move.length) {
             move.forEach(el => el.classList.remove('available_square'));
             move = [];
@@ -117,7 +129,15 @@ blacks.forEach(piece => {
                 move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+1}`));
                 move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+2}`));
 
-                move.forEach(el => el.classList.add('available_square'));
+                // Loop for getting click event
+                move.forEach(el => {
+                    el.classList.add('available_square');
+                    el.addEventListener('click', () => {
+                        el.appendChild(piece);
+                        turn++;
+                        console.log(turn);
+                    });
+                });
         }
     });
 });
