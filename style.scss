@@ -24,14 +24,15 @@
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);
         .square {
+            position: relative;
             aspect-ratio: 1/ 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            &.black {
+            &.black_square {
                 background-color: $black_spot;
             }
-            &.white {
+            &.white_square {
                 background-color: $white_spot;
             }
             img {
@@ -40,7 +41,12 @@
                 object-fit: contain;
                 cursor: pointer;
             }
-            .available_square {
+            &.available_square::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
                 width: 30%;
                 aspect-ratio: 1/1;
                 opacity: 0.15;

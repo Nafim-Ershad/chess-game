@@ -3,7 +3,8 @@ import './style.scss';
 
 // IMPORTANT Consts ***
 const squares = [...document.querySelectorAll('.square')]; // Convert the HTMLCollection from ".square" to Array
-const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']; // FILES = Columns; RANKS = Rows
+const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']; // FILES = Columns
+const ranks = [1, 2, 3, 4, 5, 6, 7, 8]; //RANKS = Rows
 const whites = [...document.querySelectorAll('.white')];
 const blacks = [...document.querySelectorAll('.black')];
 
@@ -29,20 +30,22 @@ for (let i = 0; i < 4; i++) {
         let s = (2 * i) + (16 * j) + 9;
 
         // BLACK
-        document.querySelector(`.square-container :nth-child(${p})`).classList.add('black');
-        document.querySelector(`.square-container :nth-child(${q})`).classList.add('black');
+        document.querySelector(`.square-container :nth-child(${p})`).classList.add('black_square');
+        document.querySelector(`.square-container :nth-child(${q})`).classList.add('black_square');
         // WHITE
-        document.querySelector(`.square-container :nth-child(${r})`).classList.add('white');
-        document.querySelector(`.square-container :nth-child(${s})`).classList.add('white');
+        document.querySelector(`.square-container :nth-child(${r})`).classList.add('white_square');
+        document.querySelector(`.square-container :nth-child(${s})`).classList.add('white_square');
     }
 }
 
 // ***************** Assigning FILES and RANKS in the board *****************
 
 
-for (let i = 0; i < 64; i++) {
-    squares[i].setAttribute('id', `${files[i%8]}${Math.floor(i/8)+1}`);
-    // console.log(squares);
+for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+        squares[(8 * i) + j].setAttribute('id', `${files[j]}${ranks[i]}`);
+        // console.log(squares);
+    }
 }
 
 // ***************** Click Handling *****************
@@ -72,21 +75,49 @@ squares.forEach(square => {
 // ***************** Position Handling *****************
 
 // Function to generate availability of movement
-function movable_sqaure(piece) {
+function pawn_movement(currentPos) {
 
 }
+var move = [];
 
 whites.forEach(piece => {
     piece.addEventListener('click', () => {
+        // CLEARING THE MOVE ARRAY
+        if (move.length) {
+            move.forEach(el => el.classList.remove('available_square'));
+            move = [];
+        }
         // PAWN movement
-        if (piece.className.includes('pawn')) {
-            if (player1.turn === 0) {
+        switch (piece.classList[0]) {
+            case 'pawn':
 
-            }
+                const currentPos = piece.parentNode.getAttribute('id').split("");
+
+                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-1}`));
+                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-2}`));
+
+                move.forEach(el => el.classList.add('available_square'));
         }
     });
 });
 
 blacks.forEach(piece => {
-    piece.addEventListener('click', () => { console.log(piece.className) });
+    piece.addEventListener('click', () => {
+        // CLEARING THE MOVE ARRAY
+        if (move.length) {
+            move.forEach(el => el.classList.remove('available_square'));
+            move = [];
+        }
+        // PAWN movement
+        switch (piece.classList[0]) {
+            case 'pawn':
+
+                const currentPos = piece.parentNode.getAttribute('id').split("");
+
+                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+1}`));
+                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+2}`));
+
+                move.forEach(el => el.classList.add('available_square'));
+        }
+    });
 });
