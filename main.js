@@ -8,6 +8,8 @@ const ranks = [1, 2, 3, 4, 5, 6, 7, 8]; //RANKS = Rows
 const whites = [...document.querySelectorAll('.white')];
 const blacks = [...document.querySelectorAll('.black')];
 
+const turnIndicator = document.getElementById('turn-indicator');
+
 // PLAYER CONSTS
 const player1 = {
     turn: 0,
@@ -20,11 +22,22 @@ const player2 = {
 // VARIABLES
 var turn = 0; // Who's turn it is
 
+
 // FUNCTIONS
-function clearMoves(moves) {
-    moves.forEach(move => move.classList.remove('available_square'));
+function changeTurn() {
+    turnIndicator.innerHTML = turn % 2 ? "Black's Turn" : "White's Turn";
 }
 
+function clearMoves(moves) {
+    if (moves.length) {
+        moves.forEach(move => move.classList.remove('available_square'));
+        return [];
+    }
+    return moves;
+}
+
+
+changeTurn();
 // ***************** loop for coloring black squares *****************
 for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 4; j++) {
@@ -85,29 +98,33 @@ var move = [];
 whites.forEach(piece => {
     piece.addEventListener('click', () => {
         // Clears the 'move' array
-        if (move.length) {
-            move.forEach(el => el.classList.remove('available_square'));
-            move = [];
-        }
+        // if (move.length) {
+        //     move.forEach(el => el.classList.remove('available_square'));
+        //     move = [];
+        // }
+        move = clearMoves(move);
         // PAWN movement
-        switch (piece.classList[0]) {
-            case 'pawn':
+        if (turn % 2 === 0) {
+            switch (piece.classList[0]) {
+                case 'pawn':
 
-                const currentPos = piece.parentNode.getAttribute('id').split("");
+                    const currentPos = piece.parentNode.getAttribute('id').split("");
 
-                // Get the predicted available squares
-                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-1}`));
-                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-2}`));
+                    // Get the predicted available squares
+                    move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-1}`));
+                    move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])-2}`));
 
-                // Loop for getting click event
-                move.forEach(el => {
-                    el.classList.add('available_square')
-                    el.addEventListener('click', () => {
-                        el.appendChild(piece);
-                        turn++;
-                        console.log(turn);
+                    // Loop for getting click event
+                    move.forEach(el => {
+                        el.classList.add('available_square')
+                        el.addEventListener('click', () => {
+                            el.appendChild(piece);
+                            el.classList.remove('available_square');
+                            turn++;
+                            changeTurn();
+                        });
                     });
-                });
+            }
         }
     });
 });
@@ -116,28 +133,32 @@ whites.forEach(piece => {
 blacks.forEach(piece => {
     piece.addEventListener('click', () => {
         // Clears the 'move' array
-        if (move.length) {
-            move.forEach(el => el.classList.remove('available_square'));
-            move = [];
-        }
+        // if (move.length) {
+        //     move.forEach(el => el.classList.remove('available_square'));
+        //     move = [];
+        // }
+        move = clearMoves(move);
         // PAWN movement
-        switch (piece.classList[0]) {
-            case 'pawn':
+        if (turn % 2 === 1) {
+            switch (piece.classList[0]) {
+                case 'pawn':
 
-                const currentPos = piece.parentNode.getAttribute('id').split("");
+                    const currentPos = piece.parentNode.getAttribute('id').split("");
 
-                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+1}`));
-                move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+2}`));
+                    move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+1}`));
+                    move.push(document.querySelector(`#${currentPos[0]}${Number(currentPos[1])+2}`));
 
-                // Loop for getting click event
-                move.forEach(el => {
-                    el.classList.add('available_square');
-                    el.addEventListener('click', () => {
-                        el.appendChild(piece);
-                        turn++;
-                        console.log(turn);
+                    // Loop for getting click event
+                    move.forEach(el => {
+                        el.classList.add('available_square');
+                        el.addEventListener('click', () => {
+                            el.appendChild(piece);
+                            el.classList.remove('available_square');
+                            turn++;
+                            changeTurn();
+                        });
                     });
-                });
+            }
         }
     });
 });
